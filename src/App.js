@@ -6,27 +6,15 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import { StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
-import { Board } from './components';
-
-const board = [];
-for (let i = 0; i < 25; i++) {
-    board.push({ index: i, hide: false });
-}
+import { Board, Piece } from './components';
+import { BoardConfig } from './configurations';
 
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'column',
-        // justifyContent: 'space-around',
-        // position: 'absolute',
-        // width: '100%',
-        // height: '100%',
-        // top: 0,
-        // right: 0,
-        // bottom: 0,
-        // left: 0,
     },
     header: {
         flex: 1,
@@ -38,11 +26,16 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: 'red',
     },
     pieces: {
         flex: 2,
         backgroundColor: 'white',
+        flexDirection: 'row',
+        flexWrap: 'nowrap',
+        justifyContent: 'space-around',
+        alignItems: 'center',
     },
     tools: {
         flex: 2,
@@ -50,21 +43,25 @@ const styles = StyleSheet.create({
     },
 });
 
-const App = () => {
+const boardStyle = BoardConfig[Math.floor(Math.random() * (BoardConfig.length - 1))];
+
+console.log('BoardStyle', boardStyle);
+
+const Game = (props) => {
+    const { name = 'bulbasaur' } = props;
+    const [currentPieces, setCurrentPieces] = useState([0, 1, 2]);
+
     return (
         <>
             <StatusBar />
-            <Text style={styles.header}>Pokemon Puzz</Text>
+            <Text style={styles.header}>Pokemon Puzzle</Text>
             <View style={styles.board}>
-                <Board
-                    name="bulbasaur"
-                    numOfCol={5}
-                    numOfRow={5}
-                    tiles={board}
-                />
+                <Board name={name} />
             </View>
             <View style={styles.pieces}>
-                <Text>Pieces</Text>
+                {currentPieces.map((piece) => {
+                    return <Piece key={piece} config={boardStyle[piece]} name={name} scale={0.55} />;
+                })}
             </View>
             <View style={styles.tools}>
                 <Text>Tools</Text>
@@ -73,4 +70,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default Game;

@@ -1,37 +1,36 @@
-import { memoize } from 'lodash';
 import { arrayOf, bool, number, shape, string } from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { ImageConfig } from '../configurations';
 import Tile from './Tile';
 
-const createStyle = memoize((numOfCol, numOfRow) => {
-    return StyleSheet.create({
-        shape: {
-            width: ImageConfig.boardSize,
-            height: ImageConfig.boardSize,
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            borderColor: Colors.dark,
-            borderStyle: 'solid',
-            borderWidth: 1,
-        },
-    });
+const styles = StyleSheet.create({
+    shape: {
+        width: ImageConfig.boardSize,
+        height: ImageConfig.boardSize,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        borderColor: Colors.dark,
+        borderStyle: 'solid',
+        borderWidth: 1,
+    },
 });
 
-const Board = (props) => {
-    const { name, numOfCol, numOfRow, tiles } = props;
+const initHiddenState = [];
+for (let i = 0; i < 25; i++) {
+    initHiddenState.push(false);
+}
 
-    const styles = createStyle(numOfCol, numOfRow);
+const Board = (props) => {
+    const { name } = props;
+
+    const [hiddenState, setHiddenState] = useState(initHiddenState);
 
     return (
         <View style={styles.shape}>
-            {tiles.map((element) => {
-                const { index, hide } = element;
-                return (
-                    <Tile key={index} index={index} name={name} hide={hide} />
-                );
+            {hiddenState.map((value, index) => {
+                return <Tile key={index} index={index} name={name} hide={value} />;
             })}
         </View>
     );
