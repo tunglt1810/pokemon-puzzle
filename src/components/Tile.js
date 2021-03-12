@@ -40,7 +40,7 @@ const Tile = React.memo((props) => {
     const column = (index % 5) + 1;
     const path = `row-${row}-col-${column}`;
 
-    console.log('image path', path);
+    // console.log('image path', path);
 
     return <Image style={styles.stretch} source={ImageCollection[name][path]} />;
 });
