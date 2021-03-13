@@ -1,5 +1,5 @@
 /**
- * @format
+ * @author TungLT
  */
 
 import { AppRegistry } from 'react-native';

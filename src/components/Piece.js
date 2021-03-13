@@ -3,8 +3,9 @@ import { arrayOf, bool, number, shape, string } from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Draggable from 'react-native-draggable';
-import { shallowEqual } from 'react-redux';
+import { shallowEqual, useDispatch } from 'react-redux';
 import { ImageConfig } from '../configurations';
+import { boardDropPiece } from '../configurations/actions';
 import { BoardUtils } from '../utils';
 import Tile from './Tile';
 
@@ -32,6 +33,7 @@ const Piece = (props) => {
 
     const [shouldReverse, setShouldReverse] = useState(false);
     const [lastPosition, setLastPosition] = useState();
+    const dispatch = useDispatch();
 
     const pieceRef = useRef();
 
@@ -48,11 +50,14 @@ const Piece = (props) => {
             // console.log('GestureState', gestureState);
             const { dx, dy } = gestureState;
             const lastPos = { x: lastPosition.x + dx, y: lastPosition.y + dy };
-            BoardUtils.checkDropOnBoard(config, lastPos);
+            const dropPosition = BoardUtils.checkDropOnBoard(config, lastPos);
+            if (dropPosition) {
+                dispatch(boardDropPiece(config, dropPosition));
+            }
             setLastPosition(lastPos);
             // setShouldReverse(true);
         },
-        [config, lastPosition],
+        [config, lastPosition, dispatch],
         shallowEqual
     );
 

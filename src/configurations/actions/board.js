@@ -1,6 +1,7 @@
 export const BOARD_ACTION_SET_MAP = 'BOARD_ACTION_SET_MAP';
 export const BOARD_ACTION_DROP_PIECE = 'BOARD_ACTION_DROP_PIECE';
 export const BOARD_ACTION_DROP_PIECE_SUCCESS = 'BOARD_ACTION_DROP_PIECE_SUCCESS';
+export const BOARD_ACTION_FINISH = 'BOARD_ACTION_FINISH';
 
 export const boardSetMap = (mapName) => ({
     action: BOARD_ACTION_SET_MAP,
@@ -9,9 +10,37 @@ export const boardSetMap = (mapName) => ({
     },
 });
 
-export const boardDropPiece = (piece) => ({
-    action: BOARD_ACTION_DROP_PIECE,
+/**
+ * Drop piece action
+ * @typedef PieceConfig - render config of piece
+ * @type {Object}
+ * @property {number} col - the number of column in piece
+ * @property {number} row - the number of row in piece
+ * @property {number[]} tiles - the tiles index in piece
+ * @typedef DropPosition - drop position of drop event
+ * @property {number} colIndex - the index of drop point, relative with board
+ * @property {number} rowIndex - the index of drop point, relative with board
+ * @param {PieceConfig} piece - config of the dropped piece
+ * @param {DropPosition} dropPosition - drop position
+ *
+ * @example boardDropPiece({col: 3, row: 1, tiles: [1,2,3]}, {rowIndex: 0, colIndex: 0})
+ */
+export const boardDropPiece = (piece, dropPosition) => ({
+    type: BOARD_ACTION_DROP_PIECE,
     payload: {
         piece,
+        dropPosition,
     },
+});
+
+export const boardDropPieceSuccess = (piece, dropPosition) => ({
+    type: BOARD_ACTION_DROP_PIECE_SUCCESS,
+    payload: {
+        piece,
+        dropPosition,
+    },
+});
+
+export const boardFinish = () => ({
+    type: BOARD_ACTION_FINISH,
 });

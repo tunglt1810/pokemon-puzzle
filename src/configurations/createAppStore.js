@@ -1,10 +1,10 @@
-import { createStore, applyMiddleware } from 'redux';
-import createSagaMiddleware from 'redux-saga';
-import { persistReducer, persistStore } from 'redux-persist';
 import AsyncStorage from '@react-native-community/async-storage';
-import reducer from '../reducers';
+import { applyMiddleware, createStore } from 'redux';
+import { persistReducer, persistStore } from 'redux-persist';
+import createSagaMiddleware from 'redux-saga';
 import { all, fork } from 'redux-saga/effects';
-import sideEffects from '../sideEffects';
+import reducer from './reducers';
+import sideEffects from './sideEffects';
 
 const persistConfig = {
     key: 'persist-state-key',
@@ -21,10 +21,10 @@ const createAppStore = () => {
     };
     const sagaMiddleware = createSagaMiddleware();
 
-    const store = createStore(persistedReducer, applyMiddleware(sagaMiddleware()));
+    const store = createStore(persistedReducer, applyMiddleware(sagaMiddleware));
 
     // Middleware: Redux Persist Persister
-    let persistor = persistStore(store);
+    const persistor = persistStore(store);
 
     sagaMiddleware.run(saga);
 
