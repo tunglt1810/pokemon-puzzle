@@ -1,4 +1,3 @@
-import { act } from 'react-test-renderer';
 import { put, takeEvery } from 'redux-saga/effects';
 import { boardDropPieceSuccess, BOARD_ACTION_DROP_PIECE } from '../actions';
 
