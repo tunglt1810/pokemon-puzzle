@@ -2,6 +2,7 @@ export const BOARD_ACTION_SET_MAP = 'BOARD_ACTION_SET_MAP';
 export const BOARD_ACTION_DROP_PIECE = 'BOARD_ACTION_DROP_PIECE';
 export const BOARD_ACTION_DROP_PIECE_SUCCESS = 'BOARD_ACTION_DROP_PIECE_SUCCESS';
 export const BOARD_ACTION_FINISH = 'BOARD_ACTION_FINISH';
+export const BOARD_ACTION_CLOSE = 'BOARD_ACTION_CLOSE';
 
 export const boardSetMap = (mapName) => ({
     action: BOARD_ACTION_SET_MAP,
@@ -44,3 +45,5 @@ export const boardDropPieceSuccess = (piece, dropPosition) => ({
 export const boardFinish = () => ({
     type: BOARD_ACTION_FINISH,
 });
+
+export const boardClsoe = () => ({ type: BOARD_ACTION_CLOSE });

@@ -53,9 +53,10 @@ const Piece = (props) => {
             const dropPosition = BoardUtils.checkDropOnBoard(config, lastPos);
             if (dropPosition) {
                 dispatch(boardDropPiece(config, dropPosition));
+                setLastPosition(lastPos);
+            } else {
+                setShouldReverse(true);
             }
-            setLastPosition(lastPos);
-            // setShouldReverse(true);
         },
         [config, lastPosition, dispatch],
         shallowEqual

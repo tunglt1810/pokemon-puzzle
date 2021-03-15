@@ -1,2 +1,2 @@
-export { default as getBoard } from './getBoard';
-export { default as getPieces } from './getPieces';
+export * from './board';
+export * from './pieces';

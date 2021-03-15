@@ -1,4 +1,9 @@
-import { PIECE_ACTION_REMOVE_PIECE, PIECE_ACTION_RESET_PIECE, PIECE_ACTION_SHUFFLE } from '../actions';
+import {
+    BOARD_ACTION_CLOSE,
+    PIECE_ACTION_REMOVE_PIECE,
+    PIECE_ACTION_RESET_PIECE,
+    PIECE_ACTION_SHUFFLE,
+} from '../actions';
 import { default as piecesConfig } from '../pieces';
 
 const initialState = {
@@ -14,7 +19,7 @@ export default (state = initialState, action) => {
             let recent = [];
             for (let i = 0; i < 3; i++) {
                 const pieceIndex = Math.floor(Math.random() * stack.length);
-                recent.push(stack.splice(pieceIndex, 1));
+                recent.push(stack.splice(pieceIndex, 1).pop());
             }
             return {
                 stack,
@@ -26,7 +31,7 @@ export default (state = initialState, action) => {
             recent = [];
             for (let i = 0; i < 3; i++) {
                 const pieceIndex = Math.floor(Math.random() * newStack.length);
-                recent.push(newStack.splice(pieceIndex, 1));
+                recent.push(newStack.splice(pieceIndex, 1).pop());
             }
             return {
                 stack: newStack,
@@ -34,6 +39,11 @@ export default (state = initialState, action) => {
             };
         case PIECE_ACTION_REMOVE_PIECE:
             break;
+        case BOARD_ACTION_CLOSE:
+            return {
+                stack: [],
+                recent: [],
+            };
         default:
             return state;
     }
