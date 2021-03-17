@@ -3,9 +3,10 @@ import { arrayOf, bool, number, shape, string } from 'prop-types';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import Draggable from 'react-native-draggable';
-import { shallowEqual, useDispatch } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { ImageConfig } from '../configurations';
-import { boardDropPiece } from '../configurations/actions';
+import { boardDropPiece, boardReversePieceEnd } from '../configurations/actions';
+import { getReversePieceIndex } from '../configurations/selectors';
 import { BoardUtils } from '../utils';
 import Tile from './Tile';
 
@@ -25,7 +26,7 @@ const createStyle = memoize((numOfCol, numOfRow, scale) => {
 
 // TODO:  thay đổi scale khi drag
 const Piece = (props) => {
-    const { name, scale, config, draggable } = props;
+    const { name, scale, config, draggable, index } = props;
 
     const { col, row, tiles } = config;
 
@@ -33,14 +34,19 @@ const Piece = (props) => {
 
     const [shouldReverse, setShouldReverse] = useState(false);
     const [lastPosition, setLastPosition] = useState();
+    const [reset, setReset] = useState(false);
+    const reversePiece = useSelector(getReversePieceIndex);
+
     const dispatch = useDispatch();
 
     const pieceRef = useRef();
+    const lastPieceConfig = useRef();
 
     const onLayout = useCallback(() => {
         pieceRef.current.measureInWindow((x, y, width, height) => {
             console.log('Piece location', x, y);
             setLastPosition({ x, y });
+            pieceRef.current.firstPosition = { x, y };
         });
     }, []);
 
@@ -52,15 +58,30 @@ const Piece = (props) => {
             const lastPos = { x: lastPosition.x + dx, y: lastPosition.y + dy };
             const dropPosition = BoardUtils.checkDropOnBoard(config, lastPos);
             if (dropPosition) {
-                dispatch(boardDropPiece(config, dropPosition));
+                dispatch(boardDropPiece(config, dropPosition, index));
                 setLastPosition(lastPos);
             } else {
                 setShouldReverse(true);
             }
         },
-        [config, lastPosition, dispatch],
+        [index, config, lastPosition, dispatch],
         shallowEqual
     );
+
+    const onReverse = useCallback(() => {
+        if (pieceRef.current && pieceRef.current.firstPosition) {
+            setLastPosition(pieceRef.current.firstPosition);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (reversePiece === index) {
+            setShouldReverse(true);
+        }
+        return () => {
+            dispatch(boardReversePieceEnd());
+        };
+    }, [index, dispatch, reversePiece]);
 
     useEffect(() => {
         if (shouldReverse === true) {
@@ -68,15 +89,44 @@ const Piece = (props) => {
         }
     }, [shouldReverse]);
 
+    useEffect(() => {
+        // reset lại drag component
+        if (lastPieceConfig.current && lastPieceConfig.current !== config) {
+            setReset(true);
+        }
+        lastPieceConfig.current = config;
+    }, [config]);
+
+    useEffect(() => {
+        if (reset === true) {
+            setReset(false);
+        } else {
+            // xác định lại vị trí khởi tạo do thay đổi piece config
+            pieceRef.current.measureInWindow((x, y, width, height) => {
+                console.log('Piece location', x, y);
+                setLastPosition({ x, y });
+                pieceRef.current.firstPosition = { x, y };
+            });
+        }
+    }, [reset]);
+
     return (
         <View style={styles.shape} ref={pieceRef} onLayout={onLayout}>
-            <Draggable onDragRelease={onDragRelease} shouldReverse={shouldReverse} disabled={!draggable}>
-                <View style={styles.shape}>
-                    {tiles.map((imageIndex) => {
-                        return <Tile key={imageIndex} index={imageIndex} name={name} scale={scale} />;
-                    })}
-                </View>
-            </Draggable>
+            {reset ? (
+                <></>
+            ) : (
+                <Draggable
+                    onDragRelease={onDragRelease}
+                    shouldReverse={shouldReverse}
+                    onReverse={onReverse}
+                    disabled={!draggable}>
+                    <View style={styles.shape}>
+                        {tiles.map((imageIndex) => {
+                            return <Tile key={imageIndex} index={imageIndex} name={name} scale={scale} />;
+                        })}
+                    </View>
+                </Draggable>
+            )}
         </View>
     );
 };
@@ -90,6 +140,7 @@ Piece.propTypes = {
         tiles: arrayOf(number),
     }),
     draggable: bool,
+    index: number,
 };
 
 Piece.defaultProps = {

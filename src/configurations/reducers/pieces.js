@@ -26,19 +26,36 @@ export default (state = initialState, action) => {
                 recent,
             };
         case PIECE_ACTION_SHUFFLE:
-            const newStack = [];
+            let newStack = [];
             newStack.concat(state.stack, state.recent);
-            recent = [];
+            let newRecent = [];
             for (let i = 0; i < 3; i++) {
                 const pieceIndex = Math.floor(Math.random() * newStack.length);
-                recent.push(newStack.splice(pieceIndex, 1).pop());
+                newRecent.push(newStack.splice(pieceIndex, 1).pop());
             }
             return {
                 stack: newStack,
-                recent,
+                recent: newRecent,
             };
         case PIECE_ACTION_REMOVE_PIECE:
-            break;
+            const { index } = payload;
+            if (state.stack.length > 0) {
+                newStack = [].concat(state.stack);
+                newRecent = [].concat(state.recent);
+                const pieceIndex = Math.floor(Math.random() * newStack.length);
+                newRecent[index] = newStack.splice(pieceIndex, 1).pop();
+                return {
+                    stack: newStack,
+                    recent: newRecent,
+                };
+            } else {
+                newRecent = [].concat(state.recent);
+                newRecent.splice(index, 1);
+                return {
+                    stack: state.stack,
+                    recent: newRecent,
+                };
+            }
         case BOARD_ACTION_CLOSE:
             return {
                 stack: [],

@@ -63,7 +63,7 @@ const Game = (props) => {
             </View>
             <View style={styles.pieces}>
                 {recentPieces.map((piece, index) => {
-                    return <Piece key={index} config={piece} name={name} scale={0.55} />;
+                    return <Piece key={index} config={piece} name={name} scale={0.55} index={index} />;
                 })}
             </View>
             <View style={styles.tools}>

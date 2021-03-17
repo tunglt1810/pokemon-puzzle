@@ -10,10 +10,10 @@ export const pieceAddPiece = (piece) => ({
     },
 });
 
-export const pieceRemovePiece = (piece) => ({
+export const pieceRemovePiece = (index) => ({
     type: PIECE_ACTION_REMOVE_PIECE,
     payload: {
-        piece,
+        index,
     },
 });
 
