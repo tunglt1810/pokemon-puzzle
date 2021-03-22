@@ -1,4 +1,4 @@
-package com.puzz;
+package com.bass.cla.puzz;
 
 import com.facebook.react.ReactActivity;
 

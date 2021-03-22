@@ -16,6 +16,7 @@ const initialState = {
     name: '',
     tiles: initialTiles,
     reversePiece: -1,
+    moveCount: 0,
 };
 
 export default (state = initialState, action) => {
@@ -27,6 +28,7 @@ export default (state = initialState, action) => {
                 name: payload.name,
                 tiles: initialTiles,
                 reversePiece: -1,
+                moveCount: 0,
             };
         case BOARD_ACTION_DROP_PIECE_SUCCESS:
             console.log('Show correct tiles with dropped piece');
