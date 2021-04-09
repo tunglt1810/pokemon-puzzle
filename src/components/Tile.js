@@ -12,13 +12,11 @@ const createStyle = memoize((scale) => {
             width: tileSize,
             height: tileSize,
             resizeMode: 'contain',
-            margin: 1,
         },
         transparent: {
             width: tileSize,
             height: tileSize,
             resizeMode: 'contain',
-            margin: 1,
             opacity: 0,
         },
     });
