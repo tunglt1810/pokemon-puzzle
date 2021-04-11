@@ -12,9 +12,11 @@ import { pieceResetPieces } from '../configurations';
 import { getRecentPieces } from '../configurations/selectors';
 import Board from './Board';
 import Piece from './Piece';
+import Header from './Header';
 
 import background from '../assets/images/screens/game/background.png';
 import piecesBackground from '../assets/images/screens/game/background_piece.png';
+import headerBackground from '../assets/images/screens/game/background_header.png';
 
 const styles = StyleSheet.create({
     container: {
@@ -23,14 +25,14 @@ const styles = StyleSheet.create({
         height: '100%',
     },
     background: {
-        flex: 1,
+        width: '100%',
+        height: '100%',
         resizeMode: 'cover',
         justifyContent: 'center',
     },
     header: {
-        flex: 1,
+        flex: 1.5,
         color: Colors.dark,
-        // backgroundColor: 'yellow',
     },
     board: {
         flex: 5,
@@ -40,8 +42,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         // backgroundColor: 'red',
     },
+    piecesContainer: {
+        flex: 3,
+    },
     pieces: {
-        flex: 2,
         // backgroundColor: 'white',
         flexDirection: 'row',
         flexWrap: 'nowrap',
@@ -68,14 +72,22 @@ const Game = (props) => {
     return (
         <View style={styles.container}>
             <ImageBackground style={styles.background} source={background}>
-                <View style={styles.header} />
+                <View style={styles.header}>
+                    <ImageBackground style={styles.background} source={headerBackground}>
+                        <Header />
+                    </ImageBackground>
+                </View>
                 <View style={styles.board}>
                     <Board name={name} />
                 </View>
-                <View style={styles.pieces}>
-                    {recentPieces.map((piece, index) => {
-                        return <Piece key={index} config={piece} name={name} scale={0.55} index={index} />;
-                    })}
+                <View style={styles.piecesContainer}>
+                    <ImageBackground style={styles.background} source={piecesBackground}>
+                        <View style={styles.pieces}>
+                            {recentPieces.map((piece, index) => {
+                                return <Piece key={index} config={piece} name={name} scale={0.55} index={index} />;
+                            })}
+                        </View>
+                    </ImageBackground>
                 </View>
                 <View style={styles.tools}>
                     <Text>Tools</Text>
