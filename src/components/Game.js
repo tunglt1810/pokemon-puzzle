@@ -6,17 +6,12 @@
 
 import React, { useEffect } from 'react';
 import { ImageBackground, StyleSheet, Text, View } from 'react-native';
-import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { useDispatch, useSelector } from 'react-redux';
 import { pieceResetPieces } from '../configurations';
 import { getRecentPieces } from '../configurations/selectors';
 import Board from './Board';
 import Piece from './Piece';
-import Header from './Header';
-
-import background from '../assets/images/screens/game/background.png';
-import piecesBackground from '../assets/images/screens/game/background_piece.png';
-import headerBackground from '../assets/images/screens/game/background_header.png';
+import { Header } from './header';
 
 const styles = StyleSheet.create({
     container: {
@@ -32,7 +27,8 @@ const styles = StyleSheet.create({
     },
     header: {
         flex: 1.5,
-        color: Colors.dark,
+        flexDirection: 'row',
+        // color: Colors.dark,
     },
     board: {
         flex: 5,
@@ -71,9 +67,11 @@ const Game = (props) => {
 
     return (
         <View style={styles.container}>
-            <ImageBackground style={styles.background} source={background}>
+            <ImageBackground style={styles.background} source={require('../assets/images/screens/game/background.png')}>
                 <View style={styles.header}>
-                    <ImageBackground style={styles.background} source={headerBackground}>
+                    <ImageBackground
+                        style={styles.background}
+                        source={require('../assets/images/screens/game/background_header.png')}>
                         <Header />
                     </ImageBackground>
                 </View>
@@ -81,7 +79,9 @@ const Game = (props) => {
                     <Board name={name} />
                 </View>
                 <View style={styles.piecesContainer}>
-                    <ImageBackground style={styles.background} source={piecesBackground}>
+                    <ImageBackground
+                        style={styles.background}
+                        source={require('../assets/images/screens/game/background_piece.png')}>
                         <View style={styles.pieces}>
                             {recentPieces.map((piece, index) => {
                                 return <Piece key={index} config={piece} name={name} scale={0.55} index={index} />;
