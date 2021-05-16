@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import BackButton from './BackButton';
+import MoveCounter from './MoveCounter';
 
 const styles = StyleSheet.create({
     container: {
@@ -18,7 +19,7 @@ const Header = () => {
     return (
         <View style={styles.container}>
             <BackButton />
-            <Text>sssHeader</Text>
+            <MoveCounter />
         </View>
     );
 };

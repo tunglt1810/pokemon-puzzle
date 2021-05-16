@@ -4,6 +4,7 @@ import {
     BOARD_ACTION_REVERSE_PIECE,
     BOARD_ACTION_SET_MAP,
     BOARD_ACTION_REVERSE_PIECE_END,
+    BOARD_ACTION_DROP_PIECE,
 } from '../actions';
 
 const initialTiles = [];
@@ -16,7 +17,7 @@ const initialState = {
     name: '',
     tiles: initialTiles,
     reversePiece: -1,
-    moveCount: 0,
+    moveCount: 10,
 };
 
 export default (state = initialState, action) => {
@@ -24,11 +25,17 @@ export default (state = initialState, action) => {
     switch (type) {
         case BOARD_ACTION_SET_MAP:
             console.log('Reset map with name', payload.name);
+            // TODO: load level config
             return {
                 name: payload.name,
                 tiles: initialTiles,
                 reversePiece: -1,
                 moveCount: 0,
+            };
+        case BOARD_ACTION_DROP_PIECE:
+            return {
+                ...state,
+                moveCount: state.moveCount - 1,
             };
         case BOARD_ACTION_DROP_PIECE_SUCCESS:
             console.log('Show correct tiles with dropped piece');

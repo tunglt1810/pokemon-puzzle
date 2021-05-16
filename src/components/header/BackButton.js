@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, Pressable, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     backButton: {
@@ -11,16 +11,14 @@ const styles = StyleSheet.create({
 });
 
 const BackButton = () => {
-    const onClick = useCallback(() => {
+    const onPress = useCallback(() => {
         console.log('Back button click');
     }, []);
 
     return (
-        <Image
-            source={require('../../assets/images/screens/game/btn_back.png')}
-            style={styles.backButton}
-            onClick={onClick}
-        />
+        <Pressable onPress={onPress}>
+            <Image source={require('../../assets/images/screens/game/btn_back.png')} style={styles.backButton} />
+        </Pressable>
     );
 };
 
